@@ -21,5 +21,32 @@ for movie in movie_genres:
     for genre in movie:
         movie_data[genredict[genre]] = 1
     x_data.append(movie_data)
+x_data = np.array(x_data)
 
-print(x_data)
+y_data = np.array(imdb_reviews)/10
+print(y_data)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    x_data, y_data, test_size=0.3, random_state=101)
+
+# creating a regression model
+model = LinearRegression()
+
+# fitting the model
+model.fit(X_train, y_train)
+
+# making predictions
+predictions = model.predict(X_test)
+
+for i in range(len(y_test)):
+    print(f"predicts {predictions[i]}, actual review is {y_test[i]}")
+
+# model evaluation
+print('mean_squared_error : ', mean_squared_error(y_test, predictions))
+# print('mean_absolute_error : ', mean_absolute_error(y_test, predictions))
+print(f'model R^2: {model.score(X_test, y_test)}')
+# print(f'model coefficients: {model.coef_}')
+
+coef_dic = dict(zip(genres, model.coef_))
+for k, v in coef_dic.items():
+    print(f"For genre {k}, the coefficient is {v}")

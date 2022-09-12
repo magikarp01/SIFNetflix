@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pickle
+import math
 
 dataframe1 = pd.read_excel("Netflix Dataset Latest 2021.xlsx")
 # print(dataframe1)
@@ -20,7 +21,7 @@ genres = []
 imdb_reviews = []
 for i in range(len(genre_column)):
     genre_cell = genre_column[i]
-    if genre_cell is not None or imdb_column[i] is not None:
+    if genre_cell is not None and imdb_column[i] is not None and not math.isnan(imdb_column[i]):
         try:
             cell_genres = genre_cell.split(", ")
             movie_genres.append(cell_genres)
@@ -37,7 +38,7 @@ with open(genres_file_name, 'wb') as fi:
 
 reviews_file_name = 'reviews.pk'
 with open(reviews_file_name, 'wb') as fi:
-    pickle.dump(movie_genres, fi)
+    pickle.dump(imdb_reviews, fi)
 
 
 # print(genres)
